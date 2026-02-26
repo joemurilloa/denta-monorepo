@@ -32,7 +32,8 @@ async function request<T>(
 
     if (!res.ok) {
         const err = await res.json().catch(() => ({ detail: res.statusText }));
-        throw new Error(err.detail || `Error ${res.status}`);
+        // Throw the raw error object so callers can access .detail array
+        throw err;
     }
 
     // 204 No Content
