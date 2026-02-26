@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+  # ── Backend API (FastAPI) ──
+  denta-server:
+    build:
+      context: ./denta-server
+      dockerfile: Dockerfile
+    container_name: denta-server
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+    env_file:
+      - .env
+    volumes:
+      - ./denta-server:/app
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    restart: unless-stopped
+
+  # ── Frontend PWA (Vite dev server) ──
+  denta-web:
+    build:
+      context: ./denta-web
+      dockerfile: Dockerfile
+      target: dev
+    container_name: denta-web
+    ports:
+      - "5173:5173"
+    env_file:
+      - .env
+    volumes:
+      - ./denta-web:/app
+      - /app/node_modules
+    command: npm run dev -- --host 0.0.0.0
+    restart: unless-stopped
+    depends_on:
+      - denta-server

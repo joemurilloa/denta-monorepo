@@ -1,0 +1,206 @@
+/* ═══════════════════════════════════════════════════════════════
+   Auth Pages — Login & Signup
+   Premium dental-themed design
+   ═══════════════════════════════════════════════════════════════ */
+
+.auth-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 1.5rem;
+    background:
+        radial-gradient(ellipse at 20% 50%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(99, 102, 241, 0.06) 0%, transparent 50%),
+        linear-gradient(135deg, #f8fafc 0%, #eef2ff 50%, #f0f9ff 100%);
+}
+
+/* ── Card ─────────────────────────────────────────────────────── */
+.auth-card {
+    width: 100%;
+    max-width: 420px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 20px;
+    box-shadow:
+        0 4px 6px -1px rgba(0, 0, 0, 0.05),
+        0 20px 40px -8px rgba(0, 0, 0, 0.08),
+        0 0 0 1px rgba(0, 0, 0, 0.03);
+    padding: 2.5rem 2rem;
+    animation: card-in 0.4s ease-out;
+}
+
+@keyframes card-in {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* ── Header ───────────────────────────────────────────────────── */
+.auth-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.auth-logo {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 0.5rem;
+    animation: tooth-bounce 2s ease-in-out infinite;
+}
+
+@keyframes tooth-bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-6px);
+    }
+}
+
+.auth-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: 0.25rem;
+}
+
+.auth-subtitle {
+    font-size: 0.9rem;
+    color: var(--color-muted);
+}
+
+/* ── Form ─────────────────────────────────────────────────────── */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.125rem;
+}
+
+.auth-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+}
+
+.auth-field label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-text);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.auth-field input {
+    padding: 0.7rem 0.875rem;
+    border: 1.5px solid var(--color-border);
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    background: var(--color-bg);
+    color: var(--color-text);
+    transition: all 0.2s;
+    outline: none;
+}
+
+.auth-field input:focus {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px var(--color-accent-soft);
+}
+
+.auth-field input::placeholder {
+    color: var(--color-muted);
+    opacity: 0.6;
+}
+
+/* ── Button ───────────────────────────────────────────────────── */
+.auth-btn {
+    margin-top: 0.5rem;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-family: inherit;
+    color: white;
+    background: linear-gradient(135deg, var(--color-accent), var(--color-accent-dark));
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+.auth-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
+}
+
+.auth-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.auth-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ── Error ────────────────────────────────────────────────────── */
+.auth-error {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 0.875rem;
+    background: var(--color-danger-soft);
+    color: var(--color-danger);
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    animation: shake 0.4s ease-in-out;
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-4px);
+    }
+
+    75% {
+        transform: translateX(4px);
+    }
+}
+
+/* ── Footer ───────────────────────────────────────────────────── */
+.auth-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--color-border);
+    font-size: 0.875rem;
+    color: var(--color-muted);
+}
+
+.auth-footer a {
+    color: var(--color-accent);
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.auth-footer a:hover {
+    color: var(--color-accent-dark);
+    text-decoration: underline;
+}

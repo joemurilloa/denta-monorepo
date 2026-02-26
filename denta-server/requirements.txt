@@ -1,0 +1,17 @@
+# GENERATED_STUB — denta-server requirements
+# Core
+fastapi>=0.109
+uvicorn[standard]>=0.27
+sqlalchemy>=2.0
+supabase>=2.3
+pydantic>=2.5
+pydantic-settings>=2.1
+
+# Auth / JWT
+python-jose[cryptography]>=3.3
+
+# Utilities
+python-multipart>=0.0.6
+openpyxl>=3.1
+httpx>=0.26
+email-validator>=2.1
