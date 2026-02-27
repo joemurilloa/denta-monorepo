@@ -24,7 +24,7 @@ def _require_clinic(user: dict[str, Any]) -> str:
     return clinic_id
 
 
-@router.post("/", response_model=PatientRead, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=PatientRead, status_code=status.HTTP_201_CREATED)
 async def create_patient(
     body: PatientCreate,
     user: dict[str, Any] = Depends(get_current_user),
@@ -49,7 +49,7 @@ async def create_patient(
     return PatientRead(**result.data[0])
 
 
-@router.get("/", response_model=list[PatientRead])
+@router.get("", response_model=list[PatientRead])
 async def list_patients(
     user: dict[str, Any] = Depends(get_current_user),
     search: str | None = Query(None, description="Buscar por nombre"),
@@ -75,7 +75,11 @@ async def list_patients(
         )
 
     result = query.execute()
-    return [PatientRead(**row) for row in (result.data or [])]
+    patients = []
+    for row in (result.data or []):
+        row["full_name"] = f"{row.get('first_name', '')} {row.get('last_name', '')}".strip()
+        patients.append(PatientRead(**row))
+    return patients
 
 
 @router.get("/{patient_id}", response_model=PatientRead)
@@ -92,17 +96,19 @@ async def get_patient(
         .select("*")
         .eq("id", patient_id)
         .eq("clinic_id", clinic_id)
-        .maybe_single()
         .execute()
     )
+    data = result.data[0] if result.data and len(result.data) > 0 else None
 
-    if result.data is None:
+    if data is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Paciente no encontrado",
         )
+    
+    data["full_name"] = f"{data.get('first_name', '')} {data.get('last_name', '')}".strip()
 
-    return PatientRead(**result.data)
+    return PatientRead(**data)
 
 
 @router.patch("/{patient_id}", response_model=PatientRead)

@@ -2,9 +2,10 @@ import { NavLink } from "react-router-dom";
 import {
     LayoutDashboard,
     Users,
-    CalendarDays,
+    Calendar,
     Settings,
     X,
+    CalendarCheck,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -13,10 +14,11 @@ interface SidebarProps {
 }
 
 const NAV_ITEMS = [
-    { to: "/", icon: LayoutDashboard, label: "Dashboard" },
-    { to: "/patients", icon: Users, label: "Pacientes" },
-    { to: "/appointments", icon: CalendarDays, label: "Citas" },
-    { to: "/settings", icon: Settings, label: "Configuración" },
+    { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+    { to: "/pacientes", icon: Users, label: "Pacientes" },
+    { to: "/citas", icon: Calendar, label: "Citas" },
+    { to: "/agenda/configurar", icon: CalendarCheck, label: "Disponibilidad" },
+    { to: "/configuracion", icon: Settings, label: "Configuración" },
 ];
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
@@ -25,11 +27,13 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
             {/* Header */}
             <div className="sidebar-header">
                 <div className="sidebar-logo">
-                    <span className="sidebar-logo__icon">🦷</span>
+                    <div className="flex items-center justify-center bg-primary rounded-xl p-1.5">
+                        <span className="text-white text-xl">🦷</span>
+                    </div>
                     <span className="sidebar-logo__text">DentaApp</span>
                 </div>
                 <button
-                    className="sidebar-close"
+                    className="sidebar-close md:hidden"
                     onClick={onClose}
                     aria-label="Cerrar menú"
                 >
@@ -43,7 +47,6 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                     <NavLink
                         key={to}
                         to={to}
-                        end={to === "/"}
                         className={({ isActive }) =>
                             `sidebar-link ${isActive ? "sidebar-link--active" : ""}`
                         }
@@ -56,8 +59,17 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
             </nav>
 
             {/* Footer */}
-            <div className="sidebar-footer">
-                <span className="sidebar-version">v0.1.0</span>
+            <div className="mt-auto p-6 border-t border-slate-50">
+                <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-sm font-bold text-slate-500">
+                        JD
+                    </div>
+                    <div className="flex flex-col">
+                        <span className="text-sm font-semibold">Dr. Dentista</span>
+                        <span className="text-xs text-slate-400 font-medium">Plan Pro</span>
+                    </div>
+                </div>
+                <span className="text-[10px] text-slate-300 font-medium uppercase tracking-wider">DentaApp v0.1.0</span>
             </div>
         </aside>
     );

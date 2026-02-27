@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
-import "./Layout.css";
+import BottomNav from "./BottomNav";
 
 export default function AppLayout() {
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -17,9 +17,11 @@ export default function AppLayout() {
             <div className="app-main">
                 <Topbar onMenuToggle={() => setSidebarOpen((o) => !o)} />
 
-                <main className="app-content">
+                <main className="app-content pb-20 md:pb-6">
                     <Outlet />
                 </main>
+
+                <BottomNav />
             </div>
 
             {/* Mobile overlay */}

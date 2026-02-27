@@ -58,22 +58,46 @@ async def get_current_user(
 
     # Look up the user's profile to get clinic_id and role
     profile = None
+    clinic_id = None
     try:
         result = (
             sb.table("user_profiles")
             .select("clinic_id, role")
             .eq("id", user.id)
-            .maybe_single()
             .execute()
         )
-        profile = result.data
+        profile = result.data[0] if result.data and len(result.data) > 0 else None
+        clinic_id = profile.get("clinic_id") if profile else None
     except Exception:
         pass
+
+    # Fallback: if no clinic_id in profile, look up owned clinics
+    if not clinic_id:
+        try:
+            owned = (
+                sb.table("clinics")
+                .select("id")
+                .eq("owner_id", user.id)
+                .limit(1)
+                .execute()
+            )
+            if owned.data and len(owned.data) > 0:
+                clinic_id = owned.data[0]["id"]
+                # Auto-fix: update user_profiles with the missing clinic_id
+                if profile:
+                    try:
+                        sb.table("user_profiles").update(
+                            {"clinic_id": clinic_id}
+                        ).eq("id", user.id).execute()
+                    except Exception:
+                        pass
+        except Exception:
+            pass
 
     user_info: dict[str, Any] = {
         "sub": user.id,
         "email": user.email,
-        "clinic_id": profile.get("clinic_id") if profile else None,
+        "clinic_id": clinic_id,
         "role": profile.get("role", "dentist") if profile else "dentist",
     }
 

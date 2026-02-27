@@ -1,0 +1,112 @@
+/* DentalChart.css — High-end styling for the interactive chart */
+
+.odontogram-wrapper {
+    background: white;
+    border-radius: 24px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.odontogram-canvas-container {
+    overflow-x: auto;
+    max-width: 100%;
+    padding: 10px;
+    border: 1px solid #f1f5f9;
+    border-radius: 16px;
+    background: #f8fafc;
+}
+
+.odontogram-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    max-width: 800px;
+}
+
+.condition-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    background: white;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+}
+
+.condition-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+}
+
+.condition-btn.active {
+    border-color: #0ea5e9;
+    background: #f0f9ff;
+}
+
+.color-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 4px;
+}
+
+.odontogram-actions {
+    display: flex;
+    gap: 16px;
+    width: 100%;
+    max-width: 800px;
+    margin-top: 10px;
+}
+
+.odontogram-actions .btn {
+    flex: 1;
+    padding: 12px;
+    border-radius: 14px;
+    font-weight: 700;
+}
+
+/* Condition Colors */
+.dot-sano {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+}
+
+.dot-caries {
+    background: #ef4444;
+}
+
+.dot-obturado {
+    background: #3b82f6;
+}
+
+.dot-corona {
+    background: #facc15;
+}
+
+.dot-extraccion_indicada {
+    background: #f97316;
+}
+
+.dot-extraido {
+    background: #94a3b8;
+}
+
+.dot-implante {
+    background: #10b981;
+}
+
+.dot-fractura {
+    background: #a855f7;
+}
+
+.dot-conducto {
+    background: #ec4899;
+}

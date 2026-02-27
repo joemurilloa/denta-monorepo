@@ -51,7 +51,7 @@ export function useAppointments(filters?: AppointmentFilters) {
             if (filters?.status) params.set("status", filters.status);
             const qs = params.toString();
             const { data } = await api.get<Appointment[]>(
-                `/appointments/${qs ? `?${qs}` : ""}`
+                `/appointments${qs ? `?${qs}` : ""}`
             );
             return data;
         },
@@ -62,7 +62,7 @@ export function useCreateAppointment() {
     const qc = useQueryClient();
     return useMutation({
         mutationFn: (body: AppointmentCreate) =>
-            api.post<Appointment>("/appointments/", body).then((r) => r.data),
+            api.post<Appointment>("/appointments", body).then((r) => r.data),
         onSuccess: () => {
             qc.invalidateQueries({ queryKey: ["appointments"] });
         },

@@ -31,7 +31,7 @@ export function useMyClinic() {
                 return null;
             }
         },
-        staleTime: 1000 * 60 * 5,
+        staleTime: 1000 * 30, // 30 seconds
     });
 }
 
@@ -39,7 +39,7 @@ export function useCreateClinic() {
     const qc = useQueryClient();
     return useMutation({
         mutationFn: (body: ClinicCreate) =>
-            api.post<Clinic>("/clinics/", body).then((r) => r.data),
+            api.post<Clinic>("/clinics", body).then((r) => r.data),
         onSuccess: () => {
             qc.invalidateQueries({ queryKey: ["clinic"] });
         },

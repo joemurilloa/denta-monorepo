@@ -40,7 +40,7 @@ export function usePatients(search?: string) {
         queryKey: ["patients", search],
         queryFn: async () => {
             const params = search ? `?search=${encodeURIComponent(search)}` : "";
-            const { data } = await api.get<Patient[]>(`/patients/${params}`);
+            const { data } = await api.get<Patient[]>(`/patients${params}`);
             return data;
         },
     });
@@ -50,7 +50,7 @@ export function useCreatePatient() {
     const qc = useQueryClient();
     return useMutation({
         mutationFn: (body: PatientCreate) =>
-            api.post<Patient>("/patients/", body).then((r) => r.data),
+            api.post<Patient>("/patients", body).then((r) => r.data),
         onSuccess: () => {
             qc.invalidateQueries({ queryKey: ["patients"] });
         },

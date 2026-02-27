@@ -1,0 +1,115 @@
+.page-agenda-config {
+    padding: 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.config-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.config-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 1.25rem;
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-sm);
+}
+
+.config-card--highlight {
+    background: linear-gradient(to bottom right, #f0f9ff, white);
+    border-color: #bae6fd;
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.card-header h3 {
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.url-copy-box {
+    display: flex;
+    align-items: center;
+    background: white;
+    border: 1px solid #e2e8f0;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.75rem;
+    gap: 0.5rem;
+}
+
+.url-copy-box code {
+    flex: 1;
+    color: var(--color-primary);
+    font-family: monospace;
+}
+
+.url-copy-box button {
+    color: var(--color-text-muted);
+    padding: 0.25rem;
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+}
+
+.url-copy-box button:hover {
+    background: var(--color-slate-100);
+    color: var(--color-primary);
+}
+
+.days-picker {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+}
+
+.day-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 0.25rem;
+    background: white;
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 500;
+}
+
+.day-btn:hover {
+    border-color: var(--color-primary-soft);
+}
+
+.day-btn.active {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+}
+
+.day-full-name {
+    display: none;
+}
+
+.hours-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+@media (max-width: 640px) {
+    .page-agenda-config {
+        padding: 1rem;
+    }
+
+    .config-grid {
+        grid-template-columns: 1fr;
+    }
+}

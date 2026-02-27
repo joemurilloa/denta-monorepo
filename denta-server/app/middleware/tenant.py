@@ -44,11 +44,11 @@ class TenantMiddleware(BaseHTTPMiddleware):
                         sb.table("user_profiles")
                         .select("clinic_id")
                         .eq("id", user.id)
-                        .maybe_single()
                         .execute()
                     )
-                    if result.data:
-                        request.state.clinic_id = result.data.get("clinic_id")
+                    profile = result.data[0] if result.data and len(result.data) > 0 else None
+                    if profile:
+                        request.state.clinic_id = profile.get("clinic_id")
             except Exception:
                 # Let the auth dependency handle the actual 401
                 pass

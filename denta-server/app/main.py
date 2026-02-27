@@ -10,7 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import get_settings
 from app.middleware.tenant import TenantMiddleware
-from app.routers import appointments, auth, clinics, health, patients
+from app.routers import appointments, auth, availability, bookings, clinics, health, patients, odontograms
 
 
 @asynccontextmanager
@@ -36,7 +36,7 @@ def create_app() -> FastAPI:
         redoc_url="/redoc",
     )
 
-    # ── CORS ──────────────────────────────────────────────────
+    # ── CORS (must be added BEFORE tenant so it runs FIRST — LIFO) ──
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origins,
@@ -54,6 +54,9 @@ def create_app() -> FastAPI:
     app.include_router(clinics.router)
     app.include_router(patients.router)
     app.include_router(appointments.router)
+    app.include_router(availability.router)
+    app.include_router(bookings.router)
+    app.include_router(odontograms.router)
 
     return app
 

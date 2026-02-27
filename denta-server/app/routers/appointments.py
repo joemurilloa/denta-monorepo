@@ -29,7 +29,7 @@ def _require_clinic(user: dict[str, Any]) -> str:
     return clinic_id
 
 
-@router.post("/", response_model=AppointmentRead, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=AppointmentRead, status_code=status.HTTP_201_CREATED)
 async def create_appointment(
     body: AppointmentCreate,
     user: dict[str, Any] = Depends(get_current_user),
@@ -54,7 +54,7 @@ async def create_appointment(
     return AppointmentRead(**result.data[0])
 
 
-@router.get("/", response_model=list[AppointmentRead])
+@router.get("", response_model=list[AppointmentRead])
 async def list_appointments(
     user: dict[str, Any] = Depends(get_current_user),
     patient_id: str | None = Query(None, description="Filtrar por paciente"),
@@ -73,7 +73,7 @@ async def list_appointments(
 
     query = (
         sb.table("appointments")
-        .select("*")
+        .select("*, patients(first_name, last_name)")
         .eq("clinic_id", clinic_id)
         .order("date_time", desc=False)
         .range(offset, offset + limit - 1)
@@ -91,7 +91,15 @@ async def list_appointments(
         query = query.lte("date_time", date_to)
 
     result = query.execute()
-    return [AppointmentRead(**row) for row in (result.data or [])]
+    
+    appointments = []
+    for row in (result.data or []):
+        patient = row.get("patients")
+        if patient:
+            row["patient_name"] = f"{patient.get('first_name', '')} {patient.get('last_name', '')}".strip()
+        appointments.append(AppointmentRead(**row))
+        
+    return appointments
 
 
 @router.get("/{appointment_id}", response_model=AppointmentRead)
@@ -105,20 +113,24 @@ async def get_appointment(
 
     result = (
         sb.table("appointments")
-        .select("*")
+        .select("*, patients(first_name, last_name)")
         .eq("id", appointment_id)
         .eq("clinic_id", clinic_id)
-        .maybe_single()
         .execute()
     )
+    data = result.data[0] if result.data and len(result.data) > 0 else None
 
-    if result.data is None:
+    if data is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Cita no encontrada",
         )
 
-    return AppointmentRead(**result.data)
+    patient = data.get("patients")
+    if patient:
+        data["patient_name"] = f"{patient.get('first_name', '')} {patient.get('last_name', '')}".strip()
+
+    return AppointmentRead(**data)
 
 
 @router.patch("/{appointment_id}", response_model=AppointmentRead)

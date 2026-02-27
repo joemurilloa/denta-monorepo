@@ -13,7 +13,7 @@ from app.schemas.clinic import ClinicCreate, ClinicRead, ClinicUpdate
 router = APIRouter(prefix="/clinics", tags=["clinics"])
 
 
-@router.post("/", response_model=ClinicRead, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=ClinicRead, status_code=status.HTTP_201_CREATED)
 async def create_clinic(
     body: ClinicCreate,
     user: dict[str, Any] = Depends(get_current_user),
@@ -49,29 +49,36 @@ async def get_my_clinic(
     user: dict[str, Any] = Depends(get_current_user),
 ) -> ClinicRead:
     """Return the clinic the current user belongs to."""
-    clinic_id = user.get("clinic_id")
-    if not clinic_id:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="No tienes una clínica asignada",
-        )
-
     sb = get_supabase_admin()
-    result = (
+    clinic_id = user.get("clinic_id")
+
+    # If we have a clinic_id, look it up directly
+    if clinic_id:
+        result = (
+            sb.table("clinics")
+            .select("*")
+            .eq("id", clinic_id)
+            .execute()
+        )
+        data = result.data[0] if result.data and len(result.data) > 0 else None
+        if data:
+            return ClinicRead(**data)
+
+    # Fallback: look up clinic owned by this user
+    owned = (
         sb.table("clinics")
         .select("*")
-        .eq("id", clinic_id)
-        .maybe_single()
+        .eq("owner_id", user["sub"])
+        .limit(1)
         .execute()
     )
+    if owned.data and len(owned.data) > 0:
+        return ClinicRead(**owned.data[0])
 
-    if result.data is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Clínica no encontrada",
-        )
-
-    return ClinicRead(**result.data)
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail="No tienes una clínica asignada",
+    )
 
 
 @router.patch("/{clinic_id}", response_model=ClinicRead)
@@ -88,17 +95,17 @@ async def update_clinic(
         sb.table("clinics")
         .select("owner_id")
         .eq("id", clinic_id)
-        .maybe_single()
         .execute()
     )
+    existing_data = existing.data[0] if existing.data and len(existing.data) > 0 else None
 
-    if existing.data is None:
+    if existing_data is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Clínica no encontrada",
         )
 
-    if existing.data["owner_id"] != user["sub"]:
+    if existing_data["owner_id"] != user["sub"]:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Solo el propietario puede actualizar la clínica",

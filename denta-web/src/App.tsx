@@ -4,17 +4,25 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { useAuthStore } from "./stores/auth";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import PublicRoute from "./components/auth/PublicRoute";
 import AppLayout from "./components/layout/AppLayout";
+import SileoToaster from "./components/ui/Sileo";
+
+// Pages
 import LoginPage from "./pages/auth/LoginPage";
 import SignupPage from "./pages/auth/SignupPage";
 import Dashboard from "./pages/Dashboard";
 import Onboarding from "./pages/Onboarding";
 import PatientsPage from "./pages/patients/PatientsPage";
+import PatientDetailPage from "./pages/patients/PatientDetailPage";
 import AppointmentsPage from "./pages/appointments/AppointmentsPage";
+import AgendaConfigPage from "./pages/agenda/AgendaConfigPage";
+import PublicAgendaPage from "./pages/agenda/PublicAgendaPage";
 
 const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
+            staleTime: 60 * 1000,
             retry: 1,
             refetchOnWindowFocus: false,
         },
@@ -30,18 +38,35 @@ function AppRoutes() {
 
     return (
         <Routes>
-            {/* Public */}
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignupPage />} />
-            <Route path="/onboarding" element={<Onboarding />} />
+            {/* Public (Always available) */}
+            <Route path="/agenda/:slug" element={<PublicAgendaPage />} />
 
-            {/* Protected */}
+            {/* Public (Only if NOT logged in) */}
+            <Route element={<PublicRoute />}>
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/registro" element={<SignupPage />} />
+                <Route path="/signup" element={<SignupPage />} />
+            </Route>
+
+            {/* Protected (Require login) */}
             <Route element={<ProtectedRoute />}>
+                <Route path="/onboarding" element={<Onboarding />} />
                 <Route element={<AppLayout />}>
                     <Route index element={<Dashboard />} />
-                    <Route path="/patients" element={<PatientsPage />} />
-                    <Route path="/appointments" element={<AppointmentsPage />} />
-                    <Route path="/settings" element={<SettingsPlaceholder />} />
+                    <Route path="/dashboard" element={<Dashboard />} />
+
+                    {/* Pacientes */}
+                    <Route path="/pacientes" element={<PatientsPage />} />
+                    <Route path="/pacientes/:id" element={<PatientDetailPage />} />
+
+                    {/* Citas */}
+                    <Route path="/citas" element={<AppointmentsPage />} />
+
+                    {/* Agenda */}
+                    <Route path="/agenda/configurar" element={<AgendaConfigPage />} />
+
+                    {/* Configuración */}
+                    <Route path="/configuracion" element={<SettingsPage />} />
                 </Route>
             </Route>
 
@@ -51,11 +76,28 @@ function AppRoutes() {
     );
 }
 
-function SettingsPlaceholder() {
+
+function SettingsPage() {
     return (
-        <div className="placeholder-page">
-            <h1>⚙️ Configuración</h1>
-            <p>Próximamente: perfil, datos de clínica, usuarios del equipo.</p>
+        <div className="p-8">
+            <h1 className="text-2xl font-bold mb-4">🛠️ Configuración</h1>
+            <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm max-w-2xl">
+                <p className="text-slate-600 mb-4">Gestiona la configuración de tu clínica y cuenta.</p>
+                <div className="space-y-4">
+                    <button className="flex items-center justify-between w-full p-4 hover:bg-slate-50 rounded-xl transition-colors border border-transparent hover:border-slate-100">
+                        <span className="font-medium">Perfil de la Clínica</span>
+                        <span className="text-slate-400">→</span>
+                    </button>
+                    <button className="flex items-center justify-between w-full p-4 hover:bg-slate-50 rounded-xl transition-colors border border-transparent hover:border-slate-100">
+                        <span className="font-medium">Horarios de Atención</span>
+                        <span className="text-slate-400">→</span>
+                    </button>
+                    <button className="flex items-center justify-between w-full p-4 hover:bg-slate-50 rounded-xl transition-colors border border-transparent hover:border-slate-100">
+                        <span className="font-medium">Notificaciones</span>
+                        <span className="text-slate-400">→</span>
+                    </button>
+                </div>
+            </div>
         </div>
     );
 }
@@ -63,6 +105,7 @@ function SettingsPlaceholder() {
 export default function App() {
     return (
         <QueryClientProvider client={queryClient}>
+            <SileoToaster />
             <BrowserRouter>
                 <AppRoutes />
             </BrowserRouter>

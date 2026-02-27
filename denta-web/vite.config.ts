@@ -8,12 +8,12 @@ export default defineConfig({
         react(),
         VitePWA({
             registerType: "autoUpdate",
-            includeAssets: ["favicon.ico", "apple-touch-icon.png"],
+            includeAssets: ["favicon.ico", "apple-touch-icon.png", "pwa-192x192.png", "pwa-512x512.png"],
             manifest: {
                 name: "DentaApp",
                 short_name: "Denta",
                 description: "Gestión integral de consultorios dentales",
-                theme_color: "#0f172a",
+                theme_color: "#0ea5e9",
                 background_color: "#ffffff",
                 display: "standalone",
                 scope: "/",
@@ -40,7 +40,30 @@ export default defineConfig({
                         handler: "NetworkFirst",
                         options: {
                             cacheName: "supabase-api",
-                            expiration: { maxEntries: 50, maxAgeSeconds: 300 },
+                            expiration: { maxEntries: 100, maxAgeSeconds: 3600 },
+                        },
+                    },
+                    {
+                        urlPattern: /\/api\/.*/i,
+                        handler: "NetworkFirst",
+                        options: {
+                            cacheName: "local-api",
+                            expiration: { maxEntries: 100, maxAgeSeconds: 3600 },
+                        },
+                    },
+                    {
+                        urlPattern: ({ request }) =>
+                            request.destination === "style" ||
+                            request.destination === "script" ||
+                            request.destination === "image" ||
+                            request.destination === "font",
+                        handler: "CacheFirst",
+                        options: {
+                            cacheName: "static-assets",
+                            expiration: {
+                                maxEntries: 200,
+                                maxAgeSeconds: 24 * 60 * 60 * 30, // 30 days
+                            },
                         },
                     },
                 ],

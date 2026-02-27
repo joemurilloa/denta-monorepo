@@ -95,10 +95,9 @@ async def login(body: LoginRequest) -> AuthResponse:
         sb_admin.table("user_profiles")
         .select("*")
         .eq("id", user.id)
-        .maybe_single()
         .execute()
     )
-    profile = profile_result.data
+    profile = profile_result.data[0] if profile_result.data and len(profile_result.data) > 0 else None
 
     return AuthResponse(
         access_token=session.access_token,
@@ -122,10 +121,9 @@ async def get_me(current_user: dict[str, Any] = Depends(get_current_user)) -> Us
         sb_admin.table("user_profiles")
         .select("*")
         .eq("id", current_user["sub"])
-        .maybe_single()
         .execute()
     )
-    profile = result.data
+    profile = result.data[0] if result.data and len(result.data) > 0 else None
 
     if profile is None:
         raise HTTPException(
@@ -142,3 +140,44 @@ async def get_me(current_user: dict[str, Any] = Depends(get_current_user)) -> Us
         avatar_url=profile.get("avatar_url"),
         created_at=profile.get("created_at"),
     )
+@router.get("/doctor/{doctor_id}", response_model=dict[str, Any])
+async def get_public_doctor_info(doctor_id: str) -> dict[str, Any]:
+    """Public endpoint to fetch basic doctor info for the agenda page."""
+    sb_admin = get_supabase_admin()
+    
+    # Fetch profile
+    prof_res = (
+        sb_admin.table("user_profiles")
+        .select("full_name, clinic_id")
+        .eq("id", doctor_id)
+        .execute()
+    )
+    profile = prof_res.data[0] if prof_res.data and len(prof_res.data) > 0 else None
+    
+    if profile is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Doctor no encontrado",
+        )
+    
+    # Fetch clinic name
+    clinic_name = "Clínica Dental"
+    if profile.get("clinic_id"):
+        clinic_res = (
+            sb_admin.table("clinics")
+            .select("name")
+            .eq("id", profile["clinic_id"])
+            .execute()
+        )
+        if clinic_res.data and len(clinic_res.data) > 0:
+            clinic_name = clinic_res.data[0]["name"]
+            
+    # Split names for the frontend model (DoctorInfo interface)
+    names = profile["full_name"].split(" ", 1)
+    
+    return {
+        "id": doctor_id,
+        "first_name": names[0],
+        "last_name": names[1] if len(names) > 1 else "",
+        "clinic_name": clinic_name
+    }

@@ -35,6 +35,7 @@ class AppointmentRead(BaseModel):
     id: str
     clinic_id: str
     patient_id: str
+    patient_name: str | None = None
     dentist_id: str
     date_time: datetime
     duration_minutes: int
