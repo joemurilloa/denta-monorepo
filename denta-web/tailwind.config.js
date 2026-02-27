@@ -7,24 +7,42 @@ export default {
     theme: {
         extend: {
             colors: {
-                primary: {
-                    DEFAULT: '#0ea5e9',
-                    dark: '#0284c7',
-                    light: '#38bdf8',
-                    soft: 'rgba(14, 165, 233, 0.1)',
+                accent: {
+                    DEFAULT: '#1a6ef5',
+                    light: '#eff4ff',
                 },
+                base: '#f5f7fa',
+                surface: '#ffffff',
+                subtle: '#eef1f6',
+                border: '#e2e6ed',
+                success: {
+                    DEFAULT: '#059669',
+                    light: '#ecfdf5',
+                },
+                warning: {
+                    DEFAULT: '#d97706',
+                    light: '#fffbeb',
+                },
+                danger: {
+                    DEFAULT: '#dc2626',
+                },
+                text: {
+                    primary: '#111827',
+                    secondary: '#6b7280',
+                    tertiary: '#9ca3af',
+                }
             },
             fontFamily: {
-                sans: ['"Inter"', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'sans-serif'],
+                serif: ['"Instrument Serif"', 'serif'],
+                sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+                mono: ['"Geist Mono"', 'monospace'],
             },
             borderRadius: {
-                '2xl': '18px',
-                '3xl': '24px',
+                'card': '12px',
+                'button': '8px',
             },
             boxShadow: {
-                'ios-sm': '0 1px 2px rgba(0, 0, 0, 0.03)',
-                'ios-md': '0 4px 12px rgba(0, 0, 0, 0.04)',
-                'ios-lg': '0 12px 24px rgba(0, 0, 0, 0.06)',
+                'premium': '0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04)',
             },
         },
     },

@@ -1,7 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "../lib/api";
+import { useAuthStore } from "../stores/auth";
 
-interface Clinic {
+export interface Clinic {
     id: string;
     owner_id: string;
     name: string;
@@ -13,25 +14,30 @@ interface Clinic {
     updated_at: string | null;
 }
 
-interface ClinicCreate {
+export interface ClinicCreate {
     name: string;
     address?: string;
     phone?: string;
     email?: string;
 }
 
+// ... rest of the file stays same
+
 export function useMyClinic() {
+    const { session } = useAuthStore();
     return useQuery<Clinic | null>({
         queryKey: ["clinic", "me"],
         queryFn: async () => {
             try {
                 const { data } = await api.get<Clinic | null>("/clinics/me");
                 return data;
-            } catch {
+            } catch (err) {
+                console.error("Error fetching clinic:", err);
                 return null;
             }
         },
-        staleTime: 1000 * 30, // 30 seconds
+        enabled: !!session,
+        staleTime: 1000 * 60 * 5, // 5 minutes cache
     });
 }
 

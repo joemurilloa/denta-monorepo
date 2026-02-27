@@ -2,62 +2,60 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ═══════════════════════════════════════════════════════════════
-   DentaApp — Global Styles & Design System
-   ═══════════════════════════════════════════════════════════════ */
-
 /* ── Design Tokens ────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+
 :root {
   /* Colors */
-  --color-primary: #0ea5e9;
-  --color-primary-dark: #0284c7;
-  --color-primary-soft: rgba(14, 165, 233, 0.1);
-
-  --color-bg: #f8fafc;
-  --color-card: #ffffff;
-
-  --color-text: #0f172a;
-  --color-text-muted: #64748b;
-  --color-border: #f1f5f9;
-  --color-hover: rgba(0, 0, 0, 0.04);
-
-  --color-danger: #ef4444;
-  --color-success: #10b981;
-  --color-warning: #f59e0b;
+  --bg-base: #f5f7fa;
+  --bg-surface: #ffffff;
+  --bg-subtle: #eef1f6;
+  --border: #e2e6ed;
+  --accent: #1a6ef5;
+  --accent-light: #eff4ff;
+  --text-primary: #000000;
+  --text-secondary: #1a202c;
+  --text-tertiary: #2d3748;
+  --success: #059669;
+  --success-light: #ecfdf5;
+  --warning: #d97706;
+  --warning-light: #fffbeb;
+  --danger: #dc2626;
 
   /* Typography */
-  --font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Instrument Serif", serif;
+  --font-body: "Plus Jakarta Sans", sans-serif;
+  --font-mono: "Geist Mono", monospace;
 
-  /* Shadows (iOS Style) */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.03);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.04);
-  --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.06);
+  /* Shadows */
+  --shadow-premium: 0 1px 3px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.1);
 
-  /* Radius (iOS Style) */
-  --radius-md: 12px;
-  --radius-lg: 18px;
-  --radius-xl: 24px;
+  /* Radius */
+  --radius-card: 12px;
+  --radius-button: 8px;
   --radius-full: 9999px;
 }
 
 /* ── Base ─────────────────────────────────────────────────────── */
 @layer base {
   body {
-    font-family: var(--font-family);
-    background-color: var(--color-bg);
-    color: var(--color-text);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    line-height: 1.5;
+    @apply bg-base text-text-primary antialiased;
+    font-family: var(--font-body);
+    line-height: 1.6;
+    letter-spacing: -0.01em;
+    box-shadow: none !important;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply text-text-primary font-extrabold tracking-[-0.03em];
+    font-family: var(--font-body);
   }
 
   a {
-    color: var(--color-primary);
-    text-decoration: none;
-  }
-
-  a:hover {
-    text-decoration: underline;
+    @apply text-accent no-underline hover:text-accent/80 transition-all;
   }
 }
 
@@ -66,64 +64,40 @@
 
   /* Cards */
   .card {
-    background: var(--color-card);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-sm);
-    padding: 1.5rem;
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-
-  .card:hover {
-    box-shadow: var(--shadow-md);
+    @apply bg-surface border border-border rounded-card shadow-premium p-5 transition-all;
   }
 
   /* Buttons */
   .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.75rem 1.5rem;
-    border-radius: var(--radius-full);
-    font-weight: 600;
-    font-size: 0.875rem;
-    transition: all 0.2s;
-    cursor: pointer;
-    border: none;
+    @apply inline-flex items-center justify-center px-5 py-2.5 rounded-button font-bold text-sm transition-all duration-200 cursor-pointer border-none active:scale-[0.98];
     font-family: inherit;
   }
 
   .btn-primary {
-    background: var(--color-primary);
-    color: white;
+    background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%);
+    @apply text-white;
+    box-shadow: 0 2px 4px rgba(29, 78, 216, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .btn-primary:hover {
-    background: var(--color-primary-dark);
-    transform: scale(1.02);
+    @apply brightness-110;
+    box-shadow: 0 4px 8px rgba(29, 78, 216, 0.3);
   }
 
   /* ── Layout ─────────────────────────────────────────────── */
   .app-layout {
-    display: flex;
-    min-height: 100vh;
-    background: var(--color-bg);
+    @apply flex min-h-screen;
+    background-color: var(--bg-base);
+    box-shadow: none !important;
   }
 
   .app-main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
+    @apply flex-1 flex flex-col min-w-0;
   }
 
   .app-content {
-    flex: 1;
-    padding: 1.5rem;
-    max-width: 1400px;
-    width: 100%;
-    margin: 0 auto;
-    overflow-y: auto;
+    @apply flex-1 p-8 max-w-[1100px] w-full mx-auto overflow-y-auto;
   }
 
   /* ── Sidebar ────────────────────────────────────────────── */
@@ -154,7 +128,7 @@
   .sidebar-logo__text {
     font-size: 1.25rem;
     font-weight: 700;
-    color: var(--color-primary);
+    color: var(--text-primary);
     letter-spacing: -0.02em;
   }
 
@@ -170,7 +144,7 @@
   }
 
   .sidebar-close:hover {
-    background: var(--color-hover);
+    background: var(--bg-subtle);
   }
 
   .sidebar-nav {
@@ -201,9 +175,9 @@
   }
 
   .sidebar-link--active {
-    background: var(--color-primary-soft);
-    color: var(--color-primary);
-    font-weight: 600;
+    background: var(--accent-light);
+    color: var(--accent);
+    font-weight: 700;
   }
 
   .sidebar-link--active:hover {
@@ -217,10 +191,8 @@
     justify-content: space-between;
     height: 64px;
     padding: 0 1.5rem;
-    background: rgba(248, 250, 252, 0.8);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--color-border);
+    background: var(--bg-surface);
+    border-bottom: 1px solid var(--border);
     position: sticky;
     top: 0;
     z-index: 30;
@@ -233,14 +205,12 @@
     left: 0;
     right: 0;
     height: 70px;
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: var(--bg-surface);
     display: flex;
     align-items: center;
     justify-content: space-around;
     padding-bottom: env(safe-area-inset-bottom);
-    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    border-top: 1px solid var(--border);
     z-index: 40;
   }
 
@@ -263,8 +233,7 @@
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.4);
     z-index: 90;
   }
 

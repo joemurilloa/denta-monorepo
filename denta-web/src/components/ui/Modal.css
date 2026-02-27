@@ -1,8 +1,7 @@
 .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.45);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -23,13 +22,14 @@
 
 .modal-panel {
     width: 100%;
-    background: var(--color-bg);
-    border-radius: 16px;
-    box-shadow: var(--shadow-lg);
-    animation: panel-in 0.2s ease-out;
-    max-height: 85vh;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+    animation: panel-in 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    max-height: 90vh;
     display: flex;
     flex-direction: column;
+    border: 1px solid #000;
 }
 
 @keyframes panel-in {
@@ -53,8 +53,10 @@
 }
 
 .modal-title {
-    font-size: 1.1rem;
-    font-weight: 600;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #000000;
+    letter-spacing: -0.02em;
 }
 
 .modal-close {
@@ -95,25 +97,25 @@
 }
 
 .form-field label {
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: var(--color-text);
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #000000;
     text-transform: uppercase;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.05em;
 }
 
 .form-field input,
 .form-field select,
 .form-field textarea {
-    padding: 0.6rem 0.75rem;
-    border: 1.5px solid var(--color-border);
-    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    border: 2px solid #475569;
+    border-radius: 10px;
     font-family: inherit;
-    font-size: 0.9rem;
-    color: var(--color-text);
-    background: var(--color-bg);
+    font-size: 0.95rem;
+    color: #000000;
+    background: #ffffff;
     outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: all 0.2s;
 }
 
 .form-field input:focus,

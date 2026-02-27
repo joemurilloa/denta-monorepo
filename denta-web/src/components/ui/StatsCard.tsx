@@ -8,21 +8,25 @@ interface StatsCardProps {
     color?: string;
 }
 
-export default function StatsCard({ icon: Icon, label, value, trend, color = '#0ea5e9' }: StatsCardProps) {
+export default function StatsCard({ icon: Icon, label, value, trend, color = '#1a6ef5' }: StatsCardProps) {
     return (
-        <div className="card flex items-center gap-4 transition-transform hover:scale-[1.02]">
+        <div className="bg-surface border border-border rounded-card shadow-premium p-4 flex items-center gap-4 transition-all hover:translate-y-[-2px]">
             <div
-                className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0"
+                className="w-10 h-10 md:w-12 md:h-12 rounded-card flex items-center justify-center shrink-0"
                 style={{ backgroundColor: `${color}15`, color: color }}
             >
-                <Icon size={24} />
+                <Icon size={20} className="md:size-6" />
             </div>
-            <div className="flex flex-col">
-                <span className="text-sm font-medium text-slate-500 uppercase tracking-wider">{label}</span>
+            <div className="flex flex-col min-w-0">
+                <span className="text-[10px] font-bold text-text-tertiary uppercase tracking-widest truncate">
+                    {label}
+                </span>
                 <div className="flex items-baseline gap-2">
-                    <span className="text-2xl font-bold text-slate-900">{value}</span>
+                    <span className="text-xl md:text-2xl font-mono font-bold text-text-primary tracking-tight">
+                        {value}
+                    </span>
                     {trend && (
-                        <span className="text-xs font-semibold text-emerald-500 bg-emerald-50 px-1.5 py-0.5 rounded-lg">
+                        <span className="text-[10px] font-bold text-success bg-success-light px-1.5 py-0.5 rounded-full">
                             {trend}
                         </span>
                     )}

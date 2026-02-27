@@ -13,6 +13,12 @@ export interface Appointment {
     status: AppointmentStatus;
     created_at: string;
     updated_at: string | null;
+    patient_name?: string;
+    patient?: {
+        full_name: string;
+        first_name: string;
+        last_name: string;
+    };
 }
 
 export type AppointmentStatus =

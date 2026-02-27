@@ -7,6 +7,7 @@ import {
     X,
     CalendarCheck,
 } from "lucide-react";
+import { useAuthStore } from "../../stores/auth";
 
 interface SidebarProps {
     isOpen: boolean;
@@ -22,55 +23,82 @@ const NAV_ITEMS = [
 ];
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
+    const { user } = useAuthStore();
+
+    const displayName =
+        user?.user_metadata?.full_name ||
+        user?.email?.split("@")[0] ||
+        "Usuario";
+
     return (
-        <aside className={`sidebar ${isOpen ? "sidebar--open" : ""}`}>
-            {/* Header */}
-            <div className="sidebar-header">
-                <div className="sidebar-logo">
-                    <div className="flex items-center justify-center bg-primary rounded-xl p-1.5">
-                        <span className="text-white text-xl">🦷</span>
+        <>
+            {/* Sidebar Rail / Full */}
+            <aside className={`sidebar flex flex-col h-screen fixed left-0 top-0 bg-surface border-r border-border z-50 transition-all duration-300 ${isOpen ? 'w-[240px]' : 'w-0 md:w-[60px] overflow-hidden'}`}>
+                {/* Header */}
+                <div className="h-16 flex items-center px-4 border-b border-border shrink-0">
+                    <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 flex items-center justify-center bg-accent rounded-lg shrink-0">
+                            <span className="text-white text-lg">🦷</span>
+                        </div>
+                        <span className={`text-xl font-extrabold text-text-primary tracking-tight transition-opacity duration-200 ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
+                            DentaApp
+                        </span>
                     </div>
-                    <span className="sidebar-logo__text">DentaApp</span>
+                    {isOpen && (
+                        <button
+                            onClick={onClose}
+                            className="ml-auto p-1 md:hidden text-text-tertiary hover:text-text-primary"
+                        >
+                            <X size={20} />
+                        </button>
+                    )}
                 </div>
-                <button
-                    className="sidebar-close md:hidden"
+
+                {/* Navigation */}
+                <nav className="flex-1 py-4 px-2 space-y-1 overflow-y-auto">
+                    {NAV_ITEMS.map(({ to, icon: Icon, label }) => (
+                        <NavLink
+                            key={to}
+                            to={to}
+                            className={({ isActive }) =>
+                                `flex items-center gap-3 h-11 px-3 rounded-button transition-all duration-200 ${isActive
+                                    ? "bg-accent-light text-accent"
+                                    : "text-text-secondary hover:bg-subtle hover:text-text-primary"
+                                }`
+                            }
+                            onClick={() => {
+                                if (window.innerWidth < 768) onClose();
+                            }}
+                        >
+                            <Icon size={18} className="shrink-0" />
+                            <span className={`text-sm font-medium whitespace-nowrap transition-opacity duration-200 ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
+                                {label}
+                            </span>
+                        </NavLink>
+                    ))}
+                </nav>
+
+                {/* Footer / User Profile */}
+                <div className="p-4 border-t border-border shrink-0">
+                    <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-subtle flex items-center justify-center text-xs font-bold text-text-secondary shrink-0 border border-border">
+                            {displayName.charAt(0).toUpperCase()}
+                        </div>
+                        <div className={`flex flex-col min-w-0 transition-opacity duration-200 ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
+                            <span className="text-xs font-semibold text-text-primary truncate">{displayName}</span>
+                            <span className="text-[10px] text-text-tertiary uppercase tracking-wider">Plan Pro</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            {/* Mobile Overlay */}
+            {isOpen && (
+                <div
+                    className="fixed inset-0 bg-black/40 z-40 md:hidden"
                     onClick={onClose}
-                    aria-label="Cerrar menú"
-                >
-                    <X size={20} />
-                </button>
-            </div>
-
-            {/* Navigation */}
-            <nav className="sidebar-nav">
-                {NAV_ITEMS.map(({ to, icon: Icon, label }) => (
-                    <NavLink
-                        key={to}
-                        to={to}
-                        className={({ isActive }) =>
-                            `sidebar-link ${isActive ? "sidebar-link--active" : ""}`
-                        }
-                        onClick={onClose}
-                    >
-                        <Icon size={20} />
-                        <span>{label}</span>
-                    </NavLink>
-                ))}
-            </nav>
-
-            {/* Footer */}
-            <div className="mt-auto p-6 border-t border-slate-50">
-                <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-sm font-bold text-slate-500">
-                        JD
-                    </div>
-                    <div className="flex flex-col">
-                        <span className="text-sm font-semibold">Dr. Dentista</span>
-                        <span className="text-xs text-slate-400 font-medium">Plan Pro</span>
-                    </div>
-                </div>
-                <span className="text-[10px] text-slate-300 font-medium uppercase tracking-wider">DentaApp v0.1.0</span>
-            </div>
-        </aside>
+                />
+            )}
+        </>
     );
 }

@@ -85,17 +85,18 @@ export default function AppointmentForm({
         createAppointment.isPending || updateAppointment.isPending;
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
-                <div className="auth-error" style={{ marginBottom: "1rem" }}>
-                    <span>⚠️</span> {error}
+                <div className="bg-danger/5 border border-danger/10 p-3 rounded-button text-xs text-danger flex items-center gap-2 animate-in fade-in zoom-in duration-300">
+                    <span className="text-sm">⚠️</span> {error}
                 </div>
             )}
 
-            <div className="form-grid">
-                <div className="form-field form-field--full">
-                    <label>Paciente *</label>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="md:col-span-2 space-y-2">
+                    <label className="text-[11px] font-extrabold text-[#000000] uppercase tracking-widest pl-1">Paciente *</label>
                     <select
+                        className="w-full bg-white border-2 border-slate-300 rounded-button px-3 py-2.5 text-sm focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all appearance-none cursor-pointer"
                         value={form.patient_id}
                         onChange={(e) => set("patient_id", e.target.value)}
                         required
@@ -108,40 +109,48 @@ export default function AppointmentForm({
                         ))}
                     </select>
                 </div>
-                <div className="form-field">
-                    <label>Fecha y hora *</label>
+
+                <div className="space-y-2">
+                    <label className="text-[11px] font-extrabold text-[#000000] uppercase tracking-widest pl-1">Fecha y hora *</label>
                     <input
                         type="datetime-local"
+                        className="w-full bg-white border-2 border-slate-300 rounded-button px-3 py-2.5 text-sm focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all"
                         value={form.date_time}
                         onChange={(e) => set("date_time", e.target.value)}
                         required
                     />
                 </div>
-                <div className="form-field">
-                    <label>Duración (min)</label>
+
+                <div className="space-y-2">
+                    <label className="text-[11px] font-extrabold text-[#000000] uppercase tracking-widest pl-1">Duración (min)</label>
                     <input
                         type="number"
                         min="15"
                         max="480"
                         step="15"
+                        className="w-full bg-white border-2 border-slate-300 rounded-button px-3 py-2.5 text-sm focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all"
                         value={form.duration_minutes}
                         onChange={(e) =>
                             set("duration_minutes", parseInt(e.target.value) || 30)
                         }
                     />
                 </div>
-                <div className="form-field">
-                    <label>Tipo de tratamiento</label>
+
+                <div className="space-y-2">
+                    <label className="text-[11px] font-extrabold text-[#000000] uppercase tracking-widest pl-1">Tratamiento</label>
                     <input
                         type="text"
+                        className="w-full bg-white border-2 border-slate-300 rounded-button px-3 py-2.5 text-sm focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all"
                         value={form.treatment_type}
                         onChange={(e) => set("treatment_type", e.target.value)}
-                        placeholder="Limpieza, Extracción..."
+                        placeholder="Ej. Limpieza, Extracción..."
                     />
                 </div>
-                <div className="form-field">
-                    <label>Estado</label>
+
+                <div className="space-y-2">
+                    <label className="text-[11px] font-extrabold text-[#000000] uppercase tracking-widest pl-1">Estado</label>
                     <select
+                        className="w-full bg-white border-2 border-slate-300 rounded-button px-3 py-2.5 text-sm focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all appearance-none cursor-pointer"
                         value={form.status}
                         onChange={(e) => set("status", e.target.value)}
                     >
@@ -153,9 +162,11 @@ export default function AppointmentForm({
                         <option value="no_show">No asistió</option>
                     </select>
                 </div>
-                <div className="form-field form-field--full">
-                    <label>Notas</label>
+
+                <div className="md:col-span-2 space-y-2">
+                    <label className="text-[11px] font-extrabold text-[#000000] uppercase tracking-widest pl-1">Notas</label>
                     <textarea
+                        className="w-full bg-white border-2 border-slate-300 rounded-button px-3 py-2.5 text-sm focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all min-h-[100px] resize-none"
                         value={form.notes}
                         onChange={(e) => set("notes", e.target.value)}
                         placeholder="Observaciones sobre la cita..."
@@ -163,10 +174,10 @@ export default function AppointmentForm({
                 </div>
             </div>
 
-            <div className="form-actions">
+            <div className="pt-2">
                 <button
                     type="submit"
-                    className="btn btn-primary"
+                    className="btn btn-primary w-full h-11 flex items-center justify-center"
                     disabled={isPending}
                 >
                     {isPending
